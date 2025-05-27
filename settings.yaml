@@ -1,0 +1,19 @@
+cluster_name: Home Lab Kubernetes Cluster
+network:
+  control_ip: 10.0.0.10
+  netmask: 255.255.255.0
+  pod_cidr: 172.16.0.0/16
+nodes:
+  control:
+    name: master-00
+    cpus: 4
+    memory: 8192
+  workers:
+    count: 1
+    name-prefix: worker-
+    cpus: 4
+    memory: 8192
+software:
+  box: ubuntu/jammy64
+  #box_version: 20241002.0.0
+  calico: 3.27.2

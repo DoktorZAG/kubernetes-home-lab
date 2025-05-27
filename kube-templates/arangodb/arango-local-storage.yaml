@@ -1,0 +1,13 @@
+apiVersion: storage.arangodb.com/v1alpha
+kind: ArangoLocalStorage
+metadata:
+  name: arangodb-local-storage
+spec:
+  storageClass:
+    name: local-ssd              # this SC will be auto-created
+    isDefault: true              # makes it the cluster default (optional)
+  localPath:
+    - /var/lib/arangodb-disks
+  # optional – restrict to workers only
+  # nodeSelector:
+  #   node-role.kubernetes.io/worker: ""

@@ -1,0 +1,22 @@
+apiVersion: "database.arangodb.com/v1"
+kind: "ArangoDeployment"
+metadata:
+  name: arangodb-single
+  namespace: arangodb
+spec:
+  mode: Single                     # oder Cluster für Produktion :contentReference[oaicite:0]{index=0}
+  image: "arangodb/arangodb:3.12.2"
+  tls:
+    caSecretName: ""               # Home-Lab: meist kein In-Cluster-TLS nötig
+  auth:
+    jwtSecretName: arango-jwt      # verweist auf Secret aus Schritt 1
+  storage:
+    engine: rocksdb
+  single:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: local-ssd
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

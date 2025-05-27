@@ -1,0 +1,41 @@
+apiVersion: database.arangodb.com/v1
+kind: ArangoDeployment
+metadata:
+  name: arango-demo-cluster
+  namespace: arangodb
+spec:
+  mode: Cluster
+  image: "arangodb/arangodb:3.12.2"
+  agents:
+    count: 1
+    affinity:
+      podAntiAffinity: {}
+    volumeClaimTemplate:
+      spec:
+        storageClassName: local-ssd
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+  dbservers:
+    count: 1
+    affinity:
+      podAntiAffinity: {}
+    volumeClaimTemplate:
+      spec:
+        storageClassName: local-ssd
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+  coordinators:
+    count: 1
+    affinity:
+      podAntiAffinity: {}
+    volumeClaimTemplate:
+      spec:
+        storageClassName: local-ssd
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
