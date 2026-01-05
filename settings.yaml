@@ -1,3 +1,5 @@
+vbguest:
+  auto_update: false
 cluster_name: Home Lab Kubernetes Cluster
 network:
   control_ip: 10.0.0.10

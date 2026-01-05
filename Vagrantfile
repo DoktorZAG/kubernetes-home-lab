@@ -85,13 +85,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
+
+  vbguest_active = settings.["vbguest"]["auto_update"]
+
   # Configure vbguest for Debian/Ubuntu systems
   config.vbguest.installer = VagrantVbguest::Installers::Debian
-  config.vbguest.auto_update = true
+  config.vbguest.auto_update = vbguest_active
 
-  # Ensure package list is updated
-  config.vbguest.installer_hooks[:before_install] = [
-    'sudo apt-get update -qq',
-    'sudo apt-get install -y build-essential dkms linux-headers-$(uname -r)'
-  ]
+  if vbguest_active
+    # Ensure package list is updated
+    config.vbguest.installer_hooks[:before_install] = [
+      'sudo apt-get update -qq',
+      'sudo apt-get install -y build-essential dkms linux-headers-$(uname -r)'
+    ]
+  end
 end
