@@ -1,0 +1,21 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+
+  config.vm.define "k8s-base-builder" do |b|
+    b.vm.hostname = "k8s-base-builder"
+
+    b.vm.network "private_network", ip: "10.0.0.250"
+
+    b.vm.provision "shell", path: "scripts/base-upgrade.sh"
+    b.vm.provision "shell", path: "scripts/common-base.sh"
+
+    # Optional Cleanup
+    b.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get clean
+      sudo rm -rf /var/lib/apt/lists/*
+      sudo truncate -s 0 /etc/machine-id || true
+      sudo rm -f /var/lib/dbus/machine-id || true
+      sudo rm -rf /tmp/* /var/tmp/*
+    SHELL
+  end
+end

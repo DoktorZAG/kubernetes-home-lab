@@ -55,8 +55,3 @@ sudo sed -i 's|sandbox_image = "registry.k8s.io/pause:3.8"|sandbox_image = "regi
 # Restart containerd
 sudo systemctl restart containerd
 sudo systemctl enable containerd
-
-echo "KUBELET_EXTRA_ARGS=--node-ip=${NODE_IP}" | sudo tee /etc/default/kubelet
-sudo systemctl daemon-reload
-sudo systemctl restart kubelet
-sudo systemctl enable --now kubelet
