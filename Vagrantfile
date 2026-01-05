@@ -36,8 +36,7 @@ Vagrant.configure("2") do |config|
     end
 
     # master.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
-
-    master.vm.provision "reload", type: "reload", run: "once"
+    # master.vm.provision "reload", type: "reload", run: "once"
 
     master.vm.provision "shell",
     env: {
@@ -70,8 +69,7 @@ Vagrant.configure("2") do |config|
       end
 
       # node.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
-
-      node.vm.provision "reload", type: "reload", run: "once"
+      # node.vm.provision "reload", type: "reload", run: "once"
     
       node.vm.provision "shell",
       env: {
