@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--groups", ("/" + settings["cluster_name"])]
     end
 
-    master.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
+    # master.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
 
     master.vm.provision "reload", type: "reload", run: "once"
 
@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
     env: {
       "NODE_IP" => CONTROL_IP
     },
-	path: "scripts/common.sh"
+	path: "scripts/common-node.sh"
     
 	master.vm.provision "shell",
       env: {
@@ -69,7 +69,7 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--groups", ("/" + settings["cluster_name"])]
       end
 
-      node.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
+      # node.vm.provision "shell", name: "base-upgrade", path: "scripts/base-upgrade.sh", run: "once"
 
       node.vm.provision "reload", type: "reload", run: "once"
     
@@ -77,7 +77,7 @@ Vagrant.configure("2") do |config|
       env: {
         "NODE_IP" => NODE_IP
       },
-	  path: "scripts/common.sh"
+	  path: "scripts/common-node.sh"
 
       node.vm.provision "shell",
       env: {
