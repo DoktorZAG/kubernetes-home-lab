@@ -1,11 +1,22 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/jammy64"
+  config.vm.boot_timeout = 300
 
   config.vm.define "k8s-base-builder" do |b|
     b.vm.hostname = "k8s-base-builder"
 
-    b.vm.network "private_network", ip: "10.0.0.250"
+    # This is optional, for the case we want to access the box via this IP, e.g. for debugging
+    b.vm.network "private_network", ip: "10.0.0.250" netmask: "255.255.255.0"
 
+    b.vm.provider "virtualbox" do |vb|
+      vb.name = "k8s-base-builder"
+      vb.memory = 2048
+      vb.cpus = 2
+      vb.customize ["modifyvm", :id, "--audio", "none"]
+      vb.customize ["modifyvm", :id, "--groups", ("/" + settings["cluster_name"])]
+    end
+
+    # Base-Box Provisioning
     b.vm.provision "shell", path: "scripts/base-upgrade.sh"
     b.vm.provision "shell", path: "scripts/common-base.sh"
 
@@ -18,4 +29,14 @@ Vagrant.configure("2") do |config|
       sudo rm -rf /tmp/* /var/tmp/*
     SHELL
   end
+
+  # Configure vbguest for Debian/Ubuntu systems
+  config.vbguest.installer = VagrantVbguest::Installers::Debian
+  config.vbguest.auto_update = true
+
+  # Ensure package list is updated
+  config.vbguest.installer_hooks[:before_install] = [
+    'sudo apt-get update -qq',
+    'sudo apt-get install -y build-essential dkms linux-headers-$(uname -r)'
+  ]
 end
