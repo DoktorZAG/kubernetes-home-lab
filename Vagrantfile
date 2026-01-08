@@ -17,7 +17,8 @@ Vagrant.configure("2") do |config|
     done
   SHELL
 
-  config.vm.box = settings["software"]["box"]
+  config.vm.box = "k8s-base"
+  # config.vm.box = settings["software"]["box"]
   # config.vm.box_version = settings["software"]["box_version"]
   # config.vm.box_check_update = true
   config.vm.boot_timeout = 300
