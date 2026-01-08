@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
   end
 
 
-  vbguest_active = settings.["vbguest"]["auto_update"]
+  vbguest_active = settings["vbguest"]["auto_update"]
 
   # Configure vbguest for Debian/Ubuntu systems
   config.vbguest.installer = VagrantVbguest::Installers::Debian
