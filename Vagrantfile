@@ -25,6 +25,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "master" do |master|
     # Create a private network with a static IP address within the '10.0.0.0/24' range
+    master.vm.hostname = settings["nodes"]["control"]["name"]
     master.vm.network "private_network", ip: CONTROL_IP, netmask: settings["network"]["netmask"]
     master.vm.network "forwarded_port", guest: 6443, host: 6443
 	
