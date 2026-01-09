@@ -10,25 +10,31 @@ IP_START = Integer(IP_SECTIONS.captures[1])
 NUM_WORKER_NODES = settings["nodes"]["workers"]["count"]
 
 Vagrant.configure("2") do |config|
-  config.vm.provision "shell", env: { "IP_NW" => IP_NW, "IP_START" => IP_START, "NUM_WORKER_NODES" => NUM_WORKER_NODES }, inline: <<-SHELL
-    echo "$IP_NW$((IP_START)) master-node" >> /etc/hosts
-    for i in `seq 1 ${NUM_WORKER_NODES}`; do
-      echo "$IP_NW$((IP_START+i)) worker-node0${i}" >> /etc/hosts
-    done
-  SHELL
-
   config.vm.box = "k8s-base"
   # config.vm.box = settings["software"]["box"]
   # config.vm.box_version = settings["software"]["box_version"]
   # config.vm.box_check_update = true
   config.vm.boot_timeout = 300
 
+  # --- vagrant-hostmanager ---
+  # Keeps /etc/hosts in each guest VM (and optionally on the host) in sync with VMs and their private IPs.
+  config.hostmanager.enabled = true
+
+  # Let all VMs resolve each other via /etc/hosts inside the guests
+  config.hostmanager.manage_guest = true
+
+  # Optional: also update the host machine's hosts file (useful for ssh/curl from your laptop)
+  # config.hostmanager.manage_host = true
+
+  # Optional: include VMs that are currently offline
+  config.hostmanager.include_offline = true
+
   config.vm.define "master" do |master|
     # Create a private network with a static IP address within the '10.0.0.0/24' range
     master.vm.hostname = settings["nodes"]["control"]["name"]
     master.vm.network "private_network", ip: CONTROL_IP, netmask: settings["network"]["netmask"]
     master.vm.network "forwarded_port", guest: 6443, host: 6443
-	
+
 	master.vm.provider "virtualbox" do |vb|
       vb.name = settings["nodes"]["control"]["name"]
       vb.memory = settings["nodes"]["control"]["memory"]
@@ -45,7 +51,7 @@ Vagrant.configure("2") do |config|
       "NODE_IP" => CONTROL_IP
     },
 	path: "scripts/common-node.sh"
-    
+
 	master.vm.provision "shell",
       env: {
         "CONTROL_IP" => CONTROL_IP,
