@@ -16,18 +16,10 @@ Vagrant.configure("2") do |config|
   # config.vm.box_check_update = true
   config.vm.boot_timeout = 300
 
-  # --- vagrant-hostmanager ---
-  # Keeps /etc/hosts in each guest VM (and optionally on the host) in sync with VMs and their private IPs.
   config.hostmanager.enabled = true
-
-  # Let all VMs resolve each other via /etc/hosts inside the guests
   config.hostmanager.manage_guest = true
-
-  # Optional: also update the host machine's hosts file (useful for ssh/curl from your laptop)
-  # config.hostmanager.manage_host = true
-
-  # Optional: include VMs that are currently offline
   config.hostmanager.include_offline = true
+  # config.hostmanager.manage_host = true # optional
 
   config.vm.define "master" do |master|
     # Create a private network with a static IP address within the '10.0.0.0/24' range
